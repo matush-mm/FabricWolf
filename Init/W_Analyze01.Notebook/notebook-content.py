@@ -99,7 +99,8 @@ display(customers.distinct())
 
 # CELL ********************
 
-from pyspark.sql.functions import *
+
+
 
 # Create Year and Month columns
 transformed_df = df.withColumn("Year", year(col("OrderDate"))).withColumn("Month", month(col("OrderDate")))
@@ -178,6 +179,32 @@ df.write.format("delta").saveAsTable("salesorders")
 
  # Get the table description
 spark.sql("DESCRIBE EXTENDED salesorders").show(truncate=False)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df = spark.read.table("salesorders")
+display(df.take(10))
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+#from pyspark.sql.functions import *
+#df = spark.read.format("delta").table("salesorders")
+df1=df.select(("OrderDate"),year("Orderdate").alias("Year"),("Item")).drop_duplicates(["Year"])
+display(df1)
 
 # METADATA ********************
 
